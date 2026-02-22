@@ -10,7 +10,7 @@
 
 ## 1) Configure environment
 
-Edit `.env.production` and set real secrets and URLs.
+Edit `.env` and set real secrets and URLs.
 
 Important:
 
@@ -21,7 +21,7 @@ Important:
 
 For a fresh database only:
 
-1. Set `DB_SYNCHRONIZE=true` temporarily in `.env.production`.
+1. Set `DB_SYNCHRONIZE=true` temporarily in `.env`.
 2. Start `server` once.
 3. Set `DB_SYNCHRONIZE=false` again.
 

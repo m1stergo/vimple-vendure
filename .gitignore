@@ -5,4 +5,3 @@ static/assets
 static/email/test-emails
 .env
 .env.local
-.env.production

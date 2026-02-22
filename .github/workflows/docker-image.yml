@@ -50,6 +50,9 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
+          build-args: |
+            VENDURE_API_HOST=${{ vars.VENDURE_API_HOST || 'http://localhost' }}
+            VENDURE_API_PORT=${{ vars.VENDURE_API_PORT || '3000' }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
