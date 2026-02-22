@@ -45,6 +45,13 @@ jobs:
             type=sha,prefix=sha-
             type=raw,value=latest,enable={{is_default_branch}}
 
+      - name: Debug build vars
+        run: |
+          echo "VENDURE_API_HOST=${{ vars.VENDURE_API_HOST }}"
+          echo "VENDURE_API_PORT=${{ vars.VENDURE_API_PORT }}"
+          test -n "${{ vars.VENDURE_API_HOST }}" || (echo "VENDURE_API_HOST vacío" && exit 1)
+          test -n "${{ vars.VENDURE_API_PORT }}" || (echo "VENDURE_API_PORT vacío" && exit 1)
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
