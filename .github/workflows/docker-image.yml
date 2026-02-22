@@ -15,6 +15,7 @@ env:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    environment: vimple-vendure
     permissions:
       contents: read
       packages: write
