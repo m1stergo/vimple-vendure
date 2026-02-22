@@ -1,0 +1,64 @@
+services:
+  database:
+    image: postgres:16-alpine
+    command: ["postgres", "-c", "timezone=UTC"]
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: vendure
+      POSTGRES_USER: vendure
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      TZ: UTC
+    volumes:
+      - vendure_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vendure -d vendure"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    depends_on:
+      database:
+        condition: service_healthy
+    command: ["npm", "run", "start:server"]
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'node -e "fetch(''http://localhost:3000/health'').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"',
+        ]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    depends_on:
+      database:
+        condition: service_healthy
+    command: ["npm", "run", "start:worker"]
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'node -e "fetch(''http://localhost:3020/health'').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"',
+        ]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  vendure_db_data:
