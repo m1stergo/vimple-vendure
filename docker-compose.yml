@@ -16,7 +16,7 @@ services:
       retries: 10
 
   server:
-    image: ${APP_IMAGE:-ghcr.io/m1stergo/vimple-vendure:latest}
+    image: ghcr.io/m1stergo/vimple-vendure:latest
     restart: unless-stopped
     env_file:
       - .env.production
@@ -28,7 +28,7 @@ services:
       - "3000:3000"
 
   worker:
-    image: ${APP_IMAGE:-ghcr.io/m1stergo/vimple-vendure:latest}
+    image: ghcr.io/m1stergo/vimple-vendure:latest
     restart: unless-stopped
     env_file:
       - .env.production
